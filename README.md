@@ -9,20 +9,20 @@
 [![Dependency Status](https://img.shields.io/david/pat310/google-trends-api.svg?style=flat-square)](https://david-dm.org/pat310/google-trends-api)
 [![Known Vulnerabilities](https://snyk.io/test/github/pat310/google-trends-api/badge.svg)](https://snyk.io/test/github/pat310/google-trends-api)
 
-##v3 to v4
+## v3 to v4
 [Big changes](/CHANGES.md)!  The old google-trends endpoints are deprecated and are heavily throttled so this library has changed significantly.  You can choose to download the old version via `npm install google-trends-api@3.0.2` but it is discouraged.
 
-##Introduction
+## Introduction
 This library provides an API layer to [google trends](https://www.google.com/trends/) data.  It is constantly being expanded and improved so please check back frequently.  Also, please feel free to contribute to make the library even better! :dog:
 
-###Syntax
+### Syntax
 ```js
 const googleTrends = require('google-trends-api');
 
 googleTrends.apiMethod(optionsObject, [callback])
 ```
 
-####Parameters
+#### Parameters
 **optionsObject**
 An object with the following options keys:
 * **keyword** Target search term (string) **required**
@@ -35,7 +35,7 @@ An object with the following options keys:
 **callback**
 Optional callback function where the first parameter is an error and the second parameter is the result.  If no callback is provided, then a promise is returned.
 
-##Table of contents
+## Table of contents
 * [Installation](#installation)
 * [API](#api)
   * [Promises](#promises)
@@ -118,7 +118,7 @@ The following API methods are available:
 #### interestOverTime
 *Search interest relative to the highest point on the chart for the given region and time (100 is the peak popularity for the term)*
 
-#####Syntax
+##### Syntax
 `googleTrends.interestOverTime({keyword: string, startTime: Date, endTime: Date, geo: string}, cbFunc)`
 
 Requires an `object` as the first parameter with the following keys:
@@ -132,10 +132,10 @@ Optional callback `function` as the second parameter (otherwise returns a promis
 
 The resolution of the search changes automatically depending on the search duration.  The wider the duration window, the worse the resolution (for example, a search duration with a `startTime` and `endTime` that ends years apart will return a resolution in months, while a search duration with a `startTime` and `endTime` a few hours apart will return a resolution in minutes).
 
-#####Example 1
+##### Example 1
 Returning the search interest over time for 'Valentines Day' (by default from 2004-01-01 to today)
 
-######Input
+###### Input
 ```js
 googleTrends.interestOverTime({keyword: 'Valentines Day'})
 .then(function(results){
@@ -146,17 +146,17 @@ googleTrends.interestOverTime({keyword: 'Valentines Day'})
 });
 ```
 
-######Output
+###### Output
 ```js
 {"default":{"timelineData":[{"time":"1072915200","formattedTime":"Jan 2004","formattedAxisTime":"Jan 1, 2004","value":[26],"formattedValue":["26"]},{"time":"1075593600","formattedTime":"Feb 2004","formattedAxisTime":"Feb 1, 2004","value":[74],"formattedValue":["74"]},
 ...
 {"time":"1483228800","formattedTime":"Jan 2017","formattedAxisTime":"Jan 1, 2017","value":[18],"formattedValue":["18"]},{"time":"1485907200","formattedTime":"Feb 2017","formattedAxisTime":"Feb 1, 2017","value":[72],"formattedValue":["72"]}],"averages":[]}}
 ```
 
-#####Example 2
+##### Example 2
 Returning the search interest over time for 'Valentines Day' from the past four hours.  Note that the resolution is by minute since our query duration is shorter.
 
-######Input
+###### Input
 ```js
 googleTrends.interestOverTime({keyword: 'Valentines Day', startTime: new Date(Date.now() - (4 * 60 * 60 * 1000))}, function(err, results) {
   if (err) console.log('oh no error!', err);
@@ -164,7 +164,7 @@ googleTrends.interestOverTime({keyword: 'Valentines Day', startTime: new Date(Da
 });
 ```
 
-######Output
+###### Output
 ```js
 {"default":{"timelineData":[{"time":"1487026800","formattedTime":"Feb 13, 2017 at 6:00 PM","formattedAxisTime":"6:00 PM","value":[49],"formattedValue":["49"]},{"time":"1487026860","formattedTime":"Feb 13, 2017 at 6:01 PM","formattedAxisTime":"6:01 PM","value":[50],"formattedValue":["50"]},
 ...
@@ -178,7 +178,7 @@ googleTrends.interestOverTime({keyword: 'Valentines Day', startTime: new Date(Da
 #### interestByRegion
 *See in which location your term was most popular during the specified time frame. Values are calculated on a scale from 0 to 100, where 100 is the location with the most popularity as a fraction of total searches in that location.*
 
-#####Syntax
+##### Syntax
 `googleTrends.interestByRegion({keyword: string, startTime: Date, endTime: Date, geo: string, resolution: string}, cbFunc)`
 
 Requires an `object` as the first parameter with the following keys:
@@ -191,10 +191,10 @@ Requires an `object` as the first parameter with the following keys:
 
 Optional callback `function` as the second parameter (otherwise returns a promise)
 
-#####Example 1
+##### Example 1
 Returning the search interest by cities around the world for 'Donald Trump' from February 01, 2017 to February 06, 2017.
 
-######Input
+###### Input
 ```js
 googleTrends.interestByRegion({keyword: 'Donald Trump', startTime: new Date('2017-02-01'), endTime: new Date('2017-02-06'), resolution: 'CITY'})
 .then((res) => {
@@ -205,17 +205,17 @@ googleTrends.interestByRegion({keyword: 'Donald Trump', startTime: new Date('201
 })
 ```
 
-######Output
+###### Output
 ```js
 {"default":{"geoMapData":[{"coordinates":{"lat":18.594395,"lng":-72.3074326},"geoName":"Port-au-Prince","value":[100],"formattedValue":["100"],"maxValueIndex":0},{"coordinates":{"lat":43.467517,"lng":-79.6876659},"geoName":"Oakville","value":[90],"formattedValue":["90"],"maxValueIndex":0},
 ...
 {"coordinates":{"lat":40.9312099,"lng":-73.8987469},"geoName":"Yonkers","value":[69],"formattedValue":["69"],"maxValueIndex":0}]}}
 ```
 
-#####Example 2
+##### Example 2
 Returning the search interest by cities in California for 'Donald Trump' from February 01, 2017 to February 06, 2017.
 
-######Input
+###### Input
 ```js
 googleTrends.interestByRegion({keyword: 'Donald Trump', startTime: new Date('2017-02-01'), endTime: new Date('2017-02-06'), geo: 'US-CA'})
 .then((res) => {
@@ -226,7 +226,7 @@ googleTrends.interestByRegion({keyword: 'Donald Trump', startTime: new Date('201
 })
 ```
 
-######Output
+###### Output
 ```js
 {"default":{"geoMapData":[{"geoCode":"807","geoName":"San Francisco-Oakland-San Jose CA","value":[100],"formattedValue":["100"],"maxValueIndex":0},{"geoCode":"828","geoName":"Monterey-Salinas CA","value":[100],"formattedValue":["100"],"maxValueIndex":0},
 ...
@@ -240,7 +240,7 @@ googleTrends.interestByRegion({keyword: 'Donald Trump', startTime: new Date('201
 #### relatedQueries
 *Users searching for your term also searched for these queries.*
 
-#####Syntax
+##### Syntax
 `googleTrends.relatedQueries({keyword: string, startTime: Date, endTime: Date, geo: string}, cbFunc)`
 
 Requires an `object` as the first parameter with the following keys:
@@ -252,10 +252,10 @@ Requires an `object` as the first parameter with the following keys:
 
 Optional callback `function` as the second parameter (otherwise returns a promise)
 
-#####Example
+##### Example
 Returning top related queries for 'Westminster Dog show' with default startTime, endTime, and geo categories
 
-######Input
+###### Input
 ```js
 googleTrends.relatedQueries({keyword: 'Westminster Dog Show'})
 .then((res) => {
@@ -266,7 +266,7 @@ googleTrends.relatedQueries({keyword: 'Westminster Dog Show'})
 })
 ```
 
-######Output
+###### Output
 ```js
 {"default":{"rankedList":[{"rankedKeyword":[{"query":"dog show 2016","value":100,"formattedValue":"100","link":"/"},{"query":"2016 westminster dog show","value":95,"formattedValue":"95","link":"/"},
 ...
@@ -282,7 +282,7 @@ googleTrends.relatedQueries({keyword: 'Westminster Dog Show'})
 #### relatedTopics
 *Users searching for your term also searched for these topics*
 
-#####Syntax
+##### Syntax
 `googleTrends.relatedTopics({keyword: string, startTime: Date, endTime: Date, geo: string}, cbFunc)`
 
 Requires an `object` as the first parameter with the following keys:
@@ -294,10 +294,10 @@ Requires an `object` as the first parameter with the following keys:
 
 Optional callback `function` as the second parameter (otherwise returns a promise)
 
-#####Example
+##### Example
 Returning top related topics for 'Chipotle' from January 1st, 2015 to February 10th, 2017.
 
-######Input
+###### Input
 ```js
 googleTrends.relatedTopics({keyword: 'Chipotle', startTime: new Date('2015-01-01'), endTime: new Date('2017-02-10')})
 .then((res) => {
@@ -308,7 +308,7 @@ googleTrends.relatedTopics({keyword: 'Chipotle', startTime: new Date('2015-01-01
 })
 ```
 
-######Output
+###### Output
 ```js
 {"default":{"rankedList":[{"rankedKeyword":[{"topic":{"mid":"/m/01b566","title":"Chipotle Mexican Grill","type":"Restaurant company"},"value":100,"formattedValue":"100","link":"/"},{"topic":{"mid":"/m/02f217","title":"Chipotle","type":"Jalape\u00f1o"},"value":5,"formattedValue":"5","link":"/"},
 ...
@@ -320,7 +320,7 @@ googleTrends.relatedTopics({keyword: 'Chipotle', startTime: new Date('2015-01-01
 [back to top](#introduction)
 
 <hr>
-##Geo help
+## Geo help
 Unfortunately support is not offered for zip codes at this time.  The user must enter a country code, region (or state) code, and/or DMA (Designated Market Area) code.
 
 * A list of country codes can be found here: [country code list](https://github.com/datasets/country-codes/blob/master/data/country-codes.csv)
@@ -329,7 +329,7 @@ Unfortunately support is not offered for zip codes at this time.  The user must 
 
 <hr>
 
-##Big Thanks
+## Big Thanks
 * To [dreyco676](https://github.com/dreyco676) for the heads up on the deprecated routes and new end points.  Checkout the [python google trends](https://github.com/GeneralMills/pytrends)
 
 [back to top](#introduction)
